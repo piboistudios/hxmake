@@ -1,7 +1,7 @@
 -lib odbc32
 -lib hl
 -lib-path "./path/to/hl"
--include "./my/includes/here"
+-include-path "./my/includes/here"
 -src odbc.c
 -o odbc.dll
 -D LIBHL_EXPORTS

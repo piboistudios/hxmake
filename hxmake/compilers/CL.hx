@@ -14,11 +14,16 @@ class CL implements Compiler {
         for(i in hxMake.includePaths) {
             final includePath = new haxe.io.Path(i);
             if(includePath.ext == null) {
-                args.push('/I:$includePath');
+                args.push('/I$includePath');
             }
         }
-        trace(args);
-		// "cl".run(args, true);
+        for(i in hxMake.includes) {
+            final include = new haxe.io.Path(i);
+            if(include.ext != null) {
+                args.push('/FI$include');
+            }
+        }
+		"cl".run(args, true);
 	}
 
 	public function buildConsumableBinaries(hxMake:HxMake) {
@@ -41,8 +46,8 @@ class CL implements Compiler {
 			if (lib.file != "")
 				args.push(Path.join([lib.dir, lib.file.withExtension('lib')]));
         }
-        trace({args: args});
-        return;
-		// "cl".run(args, true);
+        // trace({args: args});
+        // return;
+		"cl".run(args, true);
 	}
 }
