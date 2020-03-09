@@ -5,11 +5,26 @@ import haxe.io.Path;
 import tink.cli.*;
 
 using hxmake.compilers.CompilerTools;
-
+using Lambda;
 @:alias(false)
 class HxMake {
-	public function new(compiler = null) {
+
+	static function readHxMake() {
+		return ~/(\s|$)/gi.split(sys.io.File.getContent(Sys.args()[0])).filter(s -> s.length != 0);
+	}
+	public static function main() {
+		final args = Sys.args();
+		if(args.length == 0) {
+			trace('No HxMakefile provided. Command usage: `hxmake <hxMakefile>');
+			Sys.exit(1);
+		}
+		final compiler = args[1];
+		final verbose = args.has('verbose') || args.has('v') || args.has('-verbose') || args.has('-v');
+		tink.Cli.process(readHxMake(), new HxMake(compiler, verbose)).handle(tink.Cli.exit);
+	}
+	public function new(compiler = null, verbose = false) {
 		this.compilerName = compiler;
+		this.verbose = verbose;
 	}
 	var compilerName:String;
 	@:flag('-lib')
@@ -39,9 +54,13 @@ class HxMake {
 			case 'cl': new hxmake.compilers.CL(this);
 			case "cc"|"clang": new hxmake.compilers.CLang(this);
 			case compiler:
+				#if eval
 				haxe.macro.Context.fatalError('HxMake: Compiler not found: $compiler. Aborting',
 					haxe.macro.Context.makePosition({file: 'hxmake.hx', max: 0, min: 0}));
 				throw 'abort';
+				#else
+				new hxmake.compilers.GCC(this);
+				#end
 		};
 	}
 	@:defaultCommand
@@ -113,7 +132,7 @@ class HxMake {
 		if (defines != null)
 			for (define in defines)
 				args = args.concat(compiler.getDefineOption(define));
-		args.concat(compiler.getOutputOptions());
+		args = args.concat(compiler.getOutputOptions());
 		if (libPaths != null)
 			for (libPath in libPaths) {
 				final libPath = new haxe.io.Path(libPath);

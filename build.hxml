@@ -1,0 +1,19 @@
+-lib tink_unittest
+-lib tink_cli
+-D hxmake-compiler=gcc
+-D hxmake-verbose
+
+-cp hxmake
+-main hxmake.HxMake
+--each
+# -lib hxnodejs
+# -js hxmake.js
+# --next
+-lib hxcpp
+-cpp bin/cpp
+# --next
+# -python hxmake.py
+# --next
+# -lua hxmake.lua
+# --next
+# -hl bin/hl/c/hxmake.c
