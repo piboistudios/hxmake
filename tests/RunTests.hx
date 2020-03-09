@@ -34,25 +34,11 @@ class Test {
 
 	function delete(file) {
 		trace('$file found! Deleting');
-		Sys.sleep(1);
+		Sys.sleep(5);
 		sys.FileSystem.deleteFile(file);
 	}
-
-	public function test_cl() {
-		Cli.process(hxMake, new HxMake('cl')).handle(() -> {
-			asserts.assert(['odbc.dll', 'odbc.exp', 'odbc.obj', 'odbc.lib'].foreach(file -> {
-				final retVal = exists(file);
-				if (retVal)
-					delete(file);
-				return retVal;
-			}));
-			asserts.done();
-		});
-		return asserts;
-	}
-
-	public function test_gcc() {
-		Cli.process(hxMake, new HxMake('gcc')).handle(() -> {
+	public function test_clang() {
+		Cli.process(hxMake, new HxMake('clang')).handle(() -> {
 			asserts.assert(['odbc.dll', 'odbc.obj'].foreach(file -> {
 				final retVal = exists(file);
 				if (retVal)
@@ -61,11 +47,34 @@ class Test {
 			}));
 			asserts.done();
 		});
-		return asserts;
+		return assert(true);
 	}
 
-	// public function test_clang() {
-	// 	Cli.process(hxMake, new HxMake()).handle(Cli.exit);
-	// 	return assert(true);
+	// public function test_cl() {
+	// 	Cli.process(hxMake, new HxMake('cl')).handle(() -> {
+	// 		asserts.assert(['odbc.dll', 'odbc.exp', 'odbc.obj', 'odbc.lib'].foreach(file -> {
+	// 			final retVal = exists(file);
+	// 			if (retVal)
+	// 				delete(file);
+	// 			return retVal;
+	// 		}));
+	// 		asserts.done();
+	// 	});
+	// 	return asserts;
 	// }
+
+	// public function test_gcc() {
+	// 	Cli.process(hxMake, new HxMake('gcc')).handle(() -> {
+	// 		asserts.assert(['odbc.dll', 'odbc.obj'].foreach(file -> {
+	// 			final retVal = exists(file);
+	// 			if (retVal)
+	// 				delete(file);
+	// 			return retVal;
+	// 		}));
+	// 		asserts.done();
+	// 	});
+	// 	return asserts;
+	// }
+
+
 }

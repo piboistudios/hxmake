@@ -1,0 +1,14 @@
+{
+    "name": "hxmake",
+    "url": "https://github.com/piboistudios/hxmake/",
+    "license": "Public",
+    "tags": ["hxmake","compiler","makefile","hxmakefile"],
+    "description": "A unified CLI to compile C with various toolchains.",
+    "version": "0.0.1",
+    "classPath": "hxmake",
+    "releasenotes": "Initial release",
+    "contributors": ["piboistudios"],
+    "dependencies": {
+        "tink_cli": ""
+    }
+}

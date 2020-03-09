@@ -37,6 +37,7 @@ class HxMake {
 		return switch compilerName {
 			case 'gcc': new hxmake.compilers.GCC(this);
 			case 'cl': new hxmake.compilers.CL(this);
+			case "cc"|"clang": new hxmake.compilers.CLang(this);
 			case compiler:
 				haxe.macro.Context.fatalError('HxMake: Compiler not found: $compiler. Aborting',
 					haxe.macro.Context.makePosition({file: 'hxmake.hx', max: 0, min: 0}));
