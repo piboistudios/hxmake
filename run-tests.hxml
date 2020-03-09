@@ -1,5 +1,8 @@
 -lib tink_unittest
 -lib tink_cli
+-D hxmake-compiler=gcc
+-D hxmake-verbose
+
 -cp tests
 -main RunTests
 --interp

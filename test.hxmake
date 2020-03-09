@@ -1,8 +1,0 @@
--lib odbc32
--lib hl
--lib-path "./path/to/hl"
--include-path "./my/includes/here"
--src odbc.c
--o odbc.dll
--D LIBHL_EXPORTS
--D API_CORE=ON

@@ -1,6 +1,7 @@
 import tink.testrunner.*;
 import tink.unit.*;
 import tink.unit.Assert.assert;
+import hxmake.compilers.*;
 import sys.FileSystem;
 import tink.cli.*;
 import tink.Cli;
@@ -16,19 +17,55 @@ class RunTests {
 }
 
 class Test {
-	public function new() {}
+	var hxMake:Array<String>;
+	var asserts:AssertionBuffer = new AssertionBuffer();
+
+	public function new() {
+		this.hxMake = readHxMake();
+	}
 
 	function readHxMake() {
-		return ~/(\s|$)/gi.split(sys.io.File.getContent("./test.hxmake")).filter(s -> s.length!=0);
-    }
-    var hxMake:Array<String>;
-    public function test_read_hxMake() {
-        hxMake = readHxMake();
-        trace(hxMake);
-        return assert(hxMake.length !=0);
-    }
-	public function test_flags() {
-		Cli.process(hxMake, new HxMake()).handle(Cli.exit);
-		return assert(true);
+		return ~/(\s|$)/gi.split(sys.io.File.getContent("./HxMakefile.test")).filter(s -> s.length != 0);
 	}
+
+	function exists(file) {
+		return sys.FileSystem.exists(file);
+	}
+
+	function delete(file) {
+		trace('$file found! Deleting');
+		Sys.sleep(1);
+		sys.FileSystem.deleteFile(file);
+	}
+
+	public function test_cl() {
+		Cli.process(hxMake, new HxMake('cl')).handle(() -> {
+			asserts.assert(['odbc.dll', 'odbc.exp', 'odbc.obj', 'odbc.lib'].foreach(file -> {
+				final retVal = exists(file);
+				if (retVal)
+					delete(file);
+				return retVal;
+			}));
+			asserts.done();
+		});
+		return asserts;
+	}
+
+	public function test_gcc() {
+		Cli.process(hxMake, new HxMake('gcc')).handle(() -> {
+			asserts.assert(['odbc.dll', 'odbc.obj'].foreach(file -> {
+				final retVal = exists(file);
+				if (retVal)
+					delete(file);
+				return retVal;
+			}));
+			asserts.done();
+		});
+		return asserts;
+	}
+
+	// public function test_clang() {
+	// 	Cli.process(hxMake, new HxMake()).handle(Cli.exit);
+	// 	return assert(true);
+	// }
 }
