@@ -1,0 +1,5 @@
+-lib tink_unittest
+-lib tink_cli
+-cp tests
+-main RunTests
+--interp
