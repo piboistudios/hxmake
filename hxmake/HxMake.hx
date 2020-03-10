@@ -6,29 +6,34 @@ import tink.cli.*;
 
 using hxmake.compilers.CompilerTools;
 using Lambda;
+
 @:alias(false)
 class HxMake {
-
 	static function readHxMake() {
 		return ~/(\s|$)/gi.split(sys.io.File.getContent(Sys.args()[0])).filter(s -> s.length != 0);
-    }
-    #if !hxnodejs
-	public static function main() {
-		final args = Sys.args();
-		if(args.length == 0) {
+	}
+
+	#if !hxnodejs
+	public static function main(?a:Array<String>) {
+		final args = a != null ? a : Sys.args();
+		trace('ARGS ARE: $args ($a)');
+		if (args.length == 0) {
 			trace('No HxMakefile provided. Command usage: `hxmake <hxMakefile>');
 			Sys.exit(1);
 		}
 		final compiler = args[1];
 		final verbose = args.has('verbose') || args.has('v') || args.has('-verbose') || args.has('-v');
 		tink.Cli.process(readHxMake(), new HxMake(compiler, verbose)).handle(tink.Cli.exit);
-    }
-    #end
+	}
+	#end
+
 	public function new(compiler = null, verbose = false) {
 		this.compilerName = compiler;
 		this.verbose = verbose;
 	}
+
 	var compilerName:String;
+
 	@:flag('-lib')
 	public var libs:Array<String> = null;
 	@:flag('-lib-path')
@@ -50,11 +55,12 @@ class HxMake {
 
 	var verbose:Bool;
 	var compiler:hxmake.compilers.Compiler;
+
 	function getCompiler(compilerName):hxmake.compilers.Compiler {
 		return switch compilerName {
 			case 'gcc': new hxmake.compilers.GCC(this);
 			case 'cl': new hxmake.compilers.CL(this);
-			case "cc"|"clang": new hxmake.compilers.CLang(this);
+			case "cc" | "clang": new hxmake.compilers.CLang(this);
 			case compiler:
 				#if eval
 				haxe.macro.Context.fatalError('HxMake: Compiler not found: $compiler. Aborting',
@@ -65,20 +71,11 @@ class HxMake {
 				#end
 		};
 	}
+
 	@:defaultCommand
 	public function run(rest:Rest<String>) {
 		// trace(rest);
-		this.compiler =
-			this.compilerName != null && this.compilerName.length != 0 ? getCompiler(this.compilerName)  :
-			#if eval
-			if (haxe.macro.Context.defined('hxmake-compiler'))
-				getCompiler(haxe.macro.Context.definedValue('hxmake-compiler'));
-			else
-				getCompiler('gcc');
-			#else
-			getCompiler('gcc');
-			#end
-		#if eval
+		this.compiler = this.compilerName != null && this.compilerName.length != 0 ? getCompiler(this.compilerName) : #if eval if (haxe.macro.Context.defined('hxmake-compiler')) getCompiler(haxe.macro.Context.definedValue('hxmake-compiler')); else getCompiler('gcc'); #else getCompiler('gcc'); #end#if eval
 		if (haxe.macro.Context.defined('hxmake-verbose'))
 			verbose = true;
 		#end
@@ -110,7 +107,7 @@ class HxMake {
 	}
 
 	function buildObjectBinaries() {
-		var  args = compiler.getSrcCompilationOptions();
+		var args = compiler.getSrcCompilationOptions();
 		if (includePaths != null)
 			for (i in includePaths) {
 				final includePath = new haxe.io.Path(i);
@@ -150,6 +147,4 @@ class HxMake {
 		trace('running cmd: ${compiler.cmd} ${args.join(' ')}');
 		compiler.cmd.run(args, verbose);
 	}
-
-
 }
