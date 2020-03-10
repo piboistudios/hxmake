@@ -59,8 +59,8 @@ class HxMake {
 		return switch compilerName {
 			case 'gcc': new hxmake.compilers.GCC(this);
 			case 'cl': new hxmake.compilers.CL(this);
-			case "cc" | "clang": new hxmake.compilers.CLang(this);
-			case "clcl" | "clang-cl": new hxmake.compilers.CLangCL(this);
+			case "clang": new hxmake.compilers.CLang(this);
+			case "clang-cl": new hxmake.compilers.CLangCL(this);
 			case compiler:
 				#if eval
 				haxe.macro.Context.fatalError('HxMake: Compiler not found: $compiler. Aborting',
@@ -75,10 +75,12 @@ class HxMake {
 	@:defaultCommand
 	public function run(rest:Rest<String>) {
 		// trace(rest);
-		this.compiler = this.compilerName != null && this.compilerName.length != 0 ? getCompiler(this.compilerName) : #if eval if (haxe.macro.Context.defined('hxmake-compiler')) getCompiler(haxe.macro.Context.definedValue('hxmake-compiler')); else getCompiler('gcc'); #else getCompiler('gcc'); #end#if eval
-		if (haxe.macro.Context.defined('hxmake-verbose'))
-			verbose = true;
-		#end
+		this.compiler = this.compilerName != null
+			&& this.compilerName.length != 0 ? getCompiler(this.compilerName) : #if eval if (haxe.macro.Context.defined('hxmake-compiler'))
+				getCompiler(haxe.macro.Context.definedValue('hxmake-compiler'));
+			else
+				getCompiler('gcc'); #else getCompiler('gcc'); #end#if eval if (haxe.macro.Context.defined('hxmake-verbose'))
+			verbose = true; #end
 		buildObjectBinaries();
 		buildFinalBinaries();
 		// cmd('cl', getGCCArgs(rest));
