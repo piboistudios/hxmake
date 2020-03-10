@@ -1,0 +1,4 @@
+-lib tink_unittest
+-lib tink_cli
+-main Run
+-neko run.n
