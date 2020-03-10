@@ -60,6 +60,7 @@ class HxMake {
 			case 'gcc': new hxmake.compilers.GCC(this);
 			case 'cl': new hxmake.compilers.CL(this);
 			case "cc" | "clang": new hxmake.compilers.CLang(this);
+			case "clcl" | "clang-cl": new hxmake.compilers.CLangCL(this);
 			case compiler:
 				#if eval
 				haxe.macro.Context.fatalError('HxMake: Compiler not found: $compiler. Aborting',

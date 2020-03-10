@@ -37,6 +37,7 @@ class Test {
 		Sys.sleep(0.5);
 		sys.FileSystem.deleteFile(file);
 	}
+	// Can't get clang runnig on my local rig :/ but assuming clang's interface is compatible with gcc and clang-cl's interface is compatible with CL, it should work
 	// public function test_clang() {
 	// 	Cli.process(hxMake, new HxMake('clang')).handle(() -> {
 	// 		asserts.assert(['odbc.dll', 'odbc.obj'].foreach(file -> {
