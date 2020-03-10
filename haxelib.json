@@ -5,7 +5,7 @@
     "tags": ["hxmake","compiler","makefile","hxmakefile"],
     "description": "A unified CLI to compile C with various toolchains.",
     "version": "0.0.1",
-    "classPath": "hxmake",
+    "classPath": "./",
     "releasenotes": "Initial release",
     "contributors": ["piboistudios"],
     "dependencies": {
