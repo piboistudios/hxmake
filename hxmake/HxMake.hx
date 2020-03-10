@@ -16,7 +16,6 @@ class HxMake {
 	#if !hxnodejs
 	public static function main(?a:Array<String>) {
 		final args = a != null ? a : Sys.args();
-		trace('ARGS ARE: $args ($a)');
 		if (args.length == 0) {
 			trace('No HxMakefile provided. Command usage: `hxmake <hxMakefile>');
 			Sys.exit(1);
