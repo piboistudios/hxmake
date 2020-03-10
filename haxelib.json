@@ -11,8 +11,6 @@
     "dependencies": {
         "tink_cli": "",
         "tink_io": "",
-        "tink_stringly": "",
-        "hxcpp": "",
-        "hxnodejs": ""
+        "tink_stringly": ""
     }
 }
