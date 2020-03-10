@@ -11,7 +11,8 @@ class HxMake {
 
 	static function readHxMake() {
 		return ~/(\s|$)/gi.split(sys.io.File.getContent(Sys.args()[0])).filter(s -> s.length != 0);
-	}
+    }
+    #if !hxnodejs
 	public static function main() {
 		final args = Sys.args();
 		if(args.length == 0) {
@@ -21,7 +22,8 @@ class HxMake {
 		final compiler = args[1];
 		final verbose = args.has('verbose') || args.has('v') || args.has('-verbose') || args.has('-v');
 		tink.Cli.process(readHxMake(), new HxMake(compiler, verbose)).handle(tink.Cli.exit);
-	}
+    }
+    #end
 	public function new(compiler = null, verbose = false) {
 		this.compilerName = compiler;
 		this.verbose = verbose;
