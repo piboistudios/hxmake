@@ -6,6 +6,7 @@
     "description": "A unified CLI to compile C with various toolchains.",
     "version": "0.0.1",
     "classPath": "./",
+    "main": "hxmake.HxMake",
     "releasenotes": "Initial release",
     "contributors": ["piboistudios"],
     "dependencies": {
