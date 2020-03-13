@@ -67,7 +67,7 @@ class HxMake {
 					haxe.macro.Context.makePosition({file: 'hxmake.hx', max: 0, min: 0}));
 				throw 'abort';
 				#else
-				new hxmake.compilers.GCC(this);
+				Sys.systemName().toLowerCase() == 'windows' ? new hxmake.compilers.CL(this) : new hxmake.compilers.GCC(this);
 				#end
 		};
 	}
